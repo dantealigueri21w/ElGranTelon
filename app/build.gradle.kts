@@ -31,6 +31,9 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
+        // MotorProgreso usa java.time (LocalDate/ChronoUnit) para la racha diaria.
+        // minSdk es 24, pero java.time nativo recien existe desde API 26: sin esto
+        // la app se cierra sola calculando la racha en Android 7 u 8.
         isCoreLibraryDesugaringEnabled = true
     }
 
