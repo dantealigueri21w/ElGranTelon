@@ -4,6 +4,7 @@ import kotlin.math.sqrt
 import pe.appmobile.elgrantelon.domain.model.LecturaVolumen
 import pe.appmobile.elgrantelon.domain.model.NivelVolumen
 
+/** Asume amplitud normalizada de -1.0 a 1.0 en muestras y rangoObjetivo (como AudioRecord en modo READ_FLOAT); PCM de 16 bits sin normalizar clasificaria todo como ALTO para siempre. */
 object MotorVolumen {
 
     fun calcularRms(muestras: FloatArray): Float {

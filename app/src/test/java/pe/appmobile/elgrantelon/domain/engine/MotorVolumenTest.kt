@@ -26,6 +26,12 @@ class MotorVolumenTest {
     }
 
     @Test
+    fun `rms de una señal alternante se calcula correctamente, no como el promedio absoluto`() {
+        val muestras = floatArrayOf(1f, -1f, 1f, -1f)
+        assertEquals(1.0f, MotorVolumen.calcularRms(muestras), 0.0001f)
+    }
+
+    @Test
     fun `rms dentro del rango objetivo clasifica ADECUADO`() {
         val muestras = FloatArray(200) { 0.25f }
         val lectura = MotorVolumen.leer(muestras, rangoObjetivo)
@@ -44,5 +50,15 @@ class MotorVolumenTest {
         val muestras = FloatArray(200) { 0.7f }
         val lectura = MotorVolumen.leer(muestras, rangoObjetivo)
         assertEquals(NivelVolumen.ALTO, lectura.nivel)
+    }
+
+    @Test
+    fun `rms exactamente en el limite inferior del rango clasifica ADECUADO`() {
+        assertEquals(NivelVolumen.ADECUADO, MotorVolumen.clasificar(0.1f, rangoObjetivo))
+    }
+
+    @Test
+    fun `rms exactamente en el limite superior del rango clasifica ADECUADO`() {
+        assertEquals(NivelVolumen.ADECUADO, MotorVolumen.clasificar(0.4f, rangoObjetivo))
     }
 }
