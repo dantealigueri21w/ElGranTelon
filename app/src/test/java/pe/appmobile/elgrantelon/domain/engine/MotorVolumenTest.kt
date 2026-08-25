@@ -32,6 +32,14 @@ class MotorVolumenTest {
     }
 
     @Test
+    fun `rms de una señal de magnitud variable distingue el cuadrado del valor absoluto`() {
+        val muestras = floatArrayOf(1f, -3f)
+        // cuadrados = [1, 9], media = 5, raiz = sqrt(5) ~= 2.236
+        // (una implementacion con el bug abs-en-vez-de-cuadrado daria (1+3)/2 = 2.0, un valor distinto)
+        assertEquals(2.236f, MotorVolumen.calcularRms(muestras), 0.001f)
+    }
+
+    @Test
     fun `rms dentro del rango objetivo clasifica ADECUADO`() {
         val muestras = FloatArray(200) { 0.25f }
         val lectura = MotorVolumen.leer(muestras, rangoObjetivo)
