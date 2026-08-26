@@ -4,6 +4,9 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import pe.appmobile.elgrantelon.data.seed.SemillaActos
+import pe.appmobile.elgrantelon.data.seed.SemillaAvatares
+import pe.appmobile.elgrantelon.data.seed.SemillaFrasesBemo
+import pe.appmobile.elgrantelon.data.seed.SemillaMedallas
 import pe.appmobile.elgrantelon.data.seed.SemillaPoemas
 
 class SemillaContractTest {
@@ -54,5 +57,26 @@ class SemillaContractTest {
         val deMarti = SemillaPoemas.poemas.filter { it.autor.contains("Martí") }
         assertEquals(1, deMarti.size)
         assertEquals("Cultivo una rosa blanca", deMarti.first().titulo)
+    }
+
+    @Test
+    fun `hay exactamente 9 medallas y sus ids coinciden con MotorProgreso`() {
+        val idsEsperados = setOf(
+            "primera_funcion", "voz_de_trueno", "buen_oido", "paso_de_actor",
+            "silencio_de_oro", "funcion_llena", "bis", "voz_propia", "telon_de_gala"
+        )
+        assertEquals(9, SemillaMedallas.catalogo.size)
+        assertEquals(idsEsperados, SemillaMedallas.catalogo.map { it.id }.toSet())
+    }
+
+    @Test
+    fun `hay exactamente 8 avatares`() {
+        assertEquals(8, SemillaAvatares.avatares.size)
+    }
+
+    @Test
+    fun `hay al menos 18 frases de Bemo, y ninguna vacia`() {
+        assertTrue(SemillaFrasesBemo.frases.size >= 18)
+        SemillaFrasesBemo.frases.forEach { assertTrue(it.isNotBlank()) }
     }
 }
