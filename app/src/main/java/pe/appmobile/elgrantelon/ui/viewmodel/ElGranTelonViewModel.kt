@@ -54,6 +54,8 @@ class ElGranTelonViewModel(application: Application) : AndroidViewModel(applicat
     private val _grabando = MutableStateFlow(false)
     val grabando: StateFlow<Boolean> = _grabando.asStateFlow()
 
+    private var esRepasoActual = false
+
     val fraseBemoActual: String get() = SemillaFrasesBemo.frases.random()
     val catalogoMedallas = SemillaMedallas.catalogo
     val catalogoAvatares = SemillaAvatares.avatares
@@ -84,8 +86,9 @@ class ElGranTelonViewModel(application: Application) : AndroidViewModel(applicat
         }
     }
 
-    fun seleccionarPoema(poema: PoemaEntity) {
+    fun seleccionarPoema(poema: PoemaEntity, esRepaso: Boolean = false) {
         _poemaActual.value = poema
+        esRepasoActual = esRepaso
     }
 
     fun iniciarDeclamacion(): Boolean {
@@ -102,8 +105,9 @@ class ElGranTelonViewModel(application: Application) : AndroidViewModel(applicat
         return pudoIniciar
     }
 
-    fun detenerDeclamacion(esRepaso: Boolean = false) {
+    fun detenerDeclamacion() {
         val poema = _poemaActual.value ?: return
+        val esRepaso = esRepasoActual
         val capturadorActivo = capturador ?: return
 
         val resultado = capturadorActivo.detener(
