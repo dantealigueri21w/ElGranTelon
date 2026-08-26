@@ -19,7 +19,7 @@ private const val F0_MAXIMO_HZ = 500f
 
 // Bemo no es una ilustracion fija: ES el reflector, y su comportamiento en este
 // Canvas es la mecanica central de la app (ficha, "Mundo e identidad visual").
-// El arte final de Gemini reemplaza este dibujo mas adelante; el mapeo brillo/
+// El arte ilustrado final reemplaza este dibujo mas adelante; el mapeo brillo/
 // altura/aleteo a las cuatro variables acusticas se queda igual.
 @Composable
 fun Bemo(

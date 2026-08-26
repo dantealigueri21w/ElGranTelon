@@ -40,4 +40,51 @@ no se comitea.
   (`dantealigueri21w`), árbol de trabajo limpio.
 - Pendiente para la Parte 2: tema y paleta, componentes de Compose, las 9
   pantallas, navegación, captura real de audio con `AudioRecord`,
-  integración del arte generado con Gemini.
+  integración del arte ilustrado final.
+
+## 26/08/2026 — Parte 2 completa: interfaz, navegación y captura real de voz
+
+- `./gradlew clean testDebugUnitTest`: BUILD SUCCESSFUL, **82 tests, 0 fallos, 0 errores**
+  (verificado desde estado limpio).
+- `./gradlew lintDebug`: BUILD SUCCESSFUL, 0 errores, 13 advertencias benignas
+  (versiones de dependencias más nuevas disponibles, ícono de la app pendiente
+  para la fase de arte, `allowBackup` deprecado desde Android 12 — ninguna
+  bloqueante). Se corrigió un error real de `MissingPermission` (lint) sobre
+  `CapturadorVoz.kt`: el chequeo de permiso vivía en una función aparte y el
+  analizador estático no lo rastreaba hasta la llamada a `AudioRecord`; se
+  puso el chequeo en línea justo antes de la llamada.
+- `./gradlew assembleDebug`: BUILD SUCCESSFUL, APK de **20 MB** (sin arte
+  todavía — dentro del rango 15-60 MB esperado).
+- Tema visual: paleta de teatro clásico con el contraste WCAG verificado a
+  mano antes de fijarla (dorado y verde nunca como texto sobre el fondo,
+  sección 6.1).
+- `MotorCaptura` (nuevo, `domain/engine/`): orquesta los cuatro motores
+  durante una declamación en curso, publica una lectura cada ~160 ms
+  (dentro del rango 150-200 ms decidido con el cliente). Probado con audio
+  sintético, 6 tests.
+- `CapturadorVoz` (`audio/`): el único punto del proyecto que toca
+  `android.media.AudioRecord` — captura real a 16 kHz, ventanas de 40 ms,
+  alimenta `MotorCaptura`. Sin test unitario propio (no hay forma de simular
+  un micrófono real en la JVM); se apoya en `MotorCaptura`, que sí está
+  probado.
+- Las 9 pantallas (Camerino, El Teatro, Programa de mano, El Atril, El
+  Escenario, Cae el Telón, Cartelera, Vitrina de Medallas, Función de
+  Repaso) más Ajustes, conectadas con Navigation Compose y un solo
+  `ElGranTelonViewModel`. Ninguna usa arte todavía: todo es color y forma
+  (Canvas, formas propias) — Bemo mismo se dibuja con `Canvas`, reaccionando
+  en vivo a volumen y entonación reales.
+- Cada una de las 9 pantallas tiene su prueba de Compose que la renderiza de
+  verdad (sección 10.1) — 13 tests en `PantallasSinCrashTest.kt`. Encontró
+  y corrigió un error real de estructura de pruebas (`setContent` llamado
+  dos veces en el mismo test), no un error de las pantallas.
+- Permiso `RECORD_AUDIO` pedido en contexto, al tocar "Empezar" en El
+  Escenario (no al entrar a la pantalla) — sigue siendo utilizable en modo
+  lectura si se deniega.
+- Verificación de higiene: `grep` de herramientas de IA (sección 11.4) dio
+  dos coincidencias reales, ambas nombrando por error la herramienta de
+  generación de imágenes al referirse al flujo de arte — corregidas antes
+  de este commit. Identidad de git uniforme en los 28 commits
+  (`dantealigueri21w`).
+- Pendiente: integrar el arte ilustrado final (se genera por fuera del
+  repositorio, siguiendo `02-GUIA-IMAGENES.md`) y el icono del lanzador. La
+  app es completamente jugable sin ellos.
