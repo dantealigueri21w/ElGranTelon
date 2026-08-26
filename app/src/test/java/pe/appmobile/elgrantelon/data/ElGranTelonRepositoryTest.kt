@@ -113,4 +113,22 @@ class ElGranTelonRepositoryTest {
 
         assertEquals(2, db.rachaDao().obtener()!!.diasConsecutivos)
     }
+
+    @Test
+    fun `sembrarSiEsNecesario carga los actos y poemas reales solo la primera vez`() = runTest {
+        val dbVacia = Room.inMemoryDatabaseBuilder(ApplicationProvider.getApplicationContext(), AppDatabase::class.java)
+            .allowMainThreadQueries()
+            .build()
+        val repositorioVacio = ElGranTelonRepository(dbVacia)
+
+        repositorioVacio.sembrarSiEsNecesario()
+        assertEquals(3, dbVacia.actoDao().listarTodos().size)
+        assertEquals(13, dbVacia.poemaDao().listarTodos().size)
+
+        // segunda llamada no debe duplicar filas
+        repositorioVacio.sembrarSiEsNecesario()
+        assertEquals(13, dbVacia.poemaDao().listarTodos().size)
+
+        dbVacia.close()
+    }
 }

@@ -7,6 +7,8 @@ import pe.appmobile.elgrantelon.data.entity.MedallaEntity
 import pe.appmobile.elgrantelon.data.entity.PerfilEntity
 import pe.appmobile.elgrantelon.data.entity.PoemaEntity
 import pe.appmobile.elgrantelon.data.entity.RachaEntity
+import pe.appmobile.elgrantelon.data.seed.SemillaActos
+import pe.appmobile.elgrantelon.data.seed.SemillaPoemas
 import pe.appmobile.elgrantelon.domain.engine.MotorProgreso
 import pe.appmobile.elgrantelon.domain.model.ResultadoIntento
 import java.time.LocalDate
@@ -33,6 +35,15 @@ class ElGranTelonRepository(private val db: AppDatabase) {
     suspend fun listarCartelera() = db.cartelDao().listarTodos()
 
     suspend fun listarMedallasGanadas(): Set<String> = db.medallaDao().listarGanadas().map { it.id }.toSet()
+
+    suspend fun sembrarSiEsNecesario() {
+        if (db.actoDao().listarTodos().isEmpty()) {
+            db.actoDao().insertarTodos(SemillaActos.actos)
+        }
+        if (db.poemaDao().listarTodos().isEmpty()) {
+            db.poemaDao().insertarTodos(SemillaPoemas.poemas)
+        }
+    }
 
     suspend fun registrarIntento(
         poema: PoemaEntity,
