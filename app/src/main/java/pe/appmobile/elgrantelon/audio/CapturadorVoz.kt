@@ -48,7 +48,16 @@ class CapturadorVoz(
             PackageManager.PERMISSION_GRANTED
 
     fun iniciar(): Boolean {
-        if (!tienePermiso() || audioRecord != null) return false
+        if (audioRecord != null) return false
+        // Chequeo en linea, no a traves de tienePermiso(): el analisis de lint
+        // para MissingPermission solo reconoce el patron ContextCompat.check...
+        // == PERMISSION_GRANTED justo antes de la llamada, no a traves de un
+        // metodo auxiliar.
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO) !=
+            PackageManager.PERMISSION_GRANTED
+        ) {
+            return false
+        }
 
         motor.reiniciar()
         _lecturaEnVivo.value = null
