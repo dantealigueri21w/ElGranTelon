@@ -1,0 +1,337 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "8fd7f4f66591f396bb6befe9f8e28b98",
+    "entities": [
+      {
+        "tableName": "perfil",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `alias` TEXT NOT NULL, `avatarId` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "alias",
+            "columnName": "alias",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "avatarId",
+            "columnName": "avatarId",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        }
+      },
+      {
+        "tableName": "acto",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `nombre` TEXT NOT NULL, `orden` INTEGER NOT NULL, `desbloqueado` INTEGER NOT NULL, `completado` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "nombre",
+            "columnName": "nombre",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "orden",
+            "columnName": "orden",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "desbloqueado",
+            "columnName": "desbloqueado",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "completado",
+            "columnName": "completado",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        }
+      },
+      {
+        "tableName": "poema",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `actoId` INTEGER NOT NULL, `titulo` TEXT NOT NULL, `autor` TEXT NOT NULL, `texto` TEXT NOT NULL, `marcasPausaCsv` TEXT NOT NULL, `volumenMinimo` REAL NOT NULL, `volumenMaximo` REAL NOT NULL, `ritmoMinimoSilabasPorMinuto` INTEGER NOT NULL, `ritmoMaximoSilabasPorMinuto` INTEGER NOT NULL, `dominado` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "actoId",
+            "columnName": "actoId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "titulo",
+            "columnName": "titulo",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "autor",
+            "columnName": "autor",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "texto",
+            "columnName": "texto",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "marcasPausaCsv",
+            "columnName": "marcasPausaCsv",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "volumenMinimo",
+            "columnName": "volumenMinimo",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "volumenMaximo",
+            "columnName": "volumenMaximo",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ritmoMinimoSilabasPorMinuto",
+            "columnName": "ritmoMinimoSilabasPorMinuto",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ritmoMaximoSilabasPorMinuto",
+            "columnName": "ritmoMaximoSilabasPorMinuto",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dominado",
+            "columnName": "dominado",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        }
+      },
+      {
+        "tableName": "intento_declamacion",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `poemaId` INTEGER NOT NULL, `fechaEpochDay` INTEGER NOT NULL, `volumenPromedio` REAL NOT NULL, `volumenAdecuado` INTEGER NOT NULL, `entonacionAdecuada` INTEGER NOT NULL, `silabasPorMinuto` INTEGER NOT NULL, `ritmoAdecuado` INTEGER NOT NULL, `pausasRespetadas` INTEGER NOT NULL, `pausasEsperadas` INTEGER NOT NULL, `aprobado` INTEGER NOT NULL, `contornoTonoCsv` TEXT NOT NULL, `esRepaso` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "poemaId",
+            "columnName": "poemaId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "fechaEpochDay",
+            "columnName": "fechaEpochDay",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "volumenPromedio",
+            "columnName": "volumenPromedio",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "volumenAdecuado",
+            "columnName": "volumenAdecuado",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "entonacionAdecuada",
+            "columnName": "entonacionAdecuada",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "silabasPorMinuto",
+            "columnName": "silabasPorMinuto",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ritmoAdecuado",
+            "columnName": "ritmoAdecuado",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "pausasRespetadas",
+            "columnName": "pausasRespetadas",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "pausasEsperadas",
+            "columnName": "pausasEsperadas",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "aprobado",
+            "columnName": "aprobado",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "contornoTonoCsv",
+            "columnName": "contornoTonoCsv",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "esRepaso",
+            "columnName": "esRepaso",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        }
+      },
+      {
+        "tableName": "cartel",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`poemaId` INTEGER NOT NULL, `fechaObtencionEpochDay` INTEGER NOT NULL, `descripcionLogro` TEXT NOT NULL, PRIMARY KEY(`poemaId`))",
+        "fields": [
+          {
+            "fieldPath": "poemaId",
+            "columnName": "poemaId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "fechaObtencionEpochDay",
+            "columnName": "fechaObtencionEpochDay",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "descripcionLogro",
+            "columnName": "descripcionLogro",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "poemaId"
+          ]
+        }
+      },
+      {
+        "tableName": "medalla",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `fechaObtencionEpochDay` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "fechaObtencionEpochDay",
+            "columnName": "fechaObtencionEpochDay",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        }
+      },
+      {
+        "tableName": "racha",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `diasConsecutivos` INTEGER NOT NULL, `ultimaFechaEpochDay` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "diasConsecutivos",
+            "columnName": "diasConsecutivos",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ultimaFechaEpochDay",
+            "columnName": "ultimaFechaEpochDay",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        }
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '8fd7f4f66591f396bb6befe9f8e28b98')"
+    ]
+  }
+}
