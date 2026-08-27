@@ -86,6 +86,51 @@ class MotorEvaluacionFuncionTest {
     }
 
     @Test
+    fun `la pista principal de un intento aprobado celebra el logro`() {
+        val resultado = MotorEvaluacionFuncion.evaluar(
+            volumenPromedio = 0.25f, rangoVolumenObjetivo = rangoVolumen,
+            contornoTono = listOf(200f, 220f), variacionMinimaTonoHz = variacionMinimaTono,
+            silabasPorMinuto = 200, rangoRitmoObjetivo = rangoRitmo,
+            pausasRespetadas = 2, pausasEsperadas = 2
+        )
+        assertTrue(MotorEvaluacionFuncion.pistaPrincipal(resultado).contains("lograda"))
+    }
+
+    @Test
+    fun `la pista principal senala el volumen cuando es lo primero que falla`() {
+        val resultado = MotorEvaluacionFuncion.evaluar(
+            volumenPromedio = 0.05f, rangoVolumenObjetivo = rangoVolumen,
+            contornoTono = listOf(200f, 220f), variacionMinimaTonoHz = variacionMinimaTono,
+            silabasPorMinuto = 400, rangoRitmoObjetivo = rangoRitmo,
+            pausasRespetadas = 0, pausasEsperadas = 4
+        )
+        assertTrue(!resultado.volumenAdecuado)
+        assertTrue(MotorEvaluacionFuncion.pistaPrincipal(resultado).contains("fuerte"))
+    }
+
+    @Test
+    fun `la pista principal senala el ritmo cuando el volumen ya esta bien`() {
+        val resultado = MotorEvaluacionFuncion.evaluar(
+            volumenPromedio = 0.25f, rangoVolumenObjetivo = rangoVolumen,
+            contornoTono = listOf(200f, 220f), variacionMinimaTonoHz = variacionMinimaTono,
+            silabasPorMinuto = 400, rangoRitmoObjetivo = rangoRitmo,
+            pausasRespetadas = 0, pausasEsperadas = 4
+        )
+        assertTrue(MotorEvaluacionFuncion.pistaPrincipal(resultado).contains("velocidad"))
+    }
+
+    @Test
+    fun `la pista principal senala las pausas cuando volumen y ritmo ya estan bien`() {
+        val resultado = MotorEvaluacionFuncion.evaluar(
+            volumenPromedio = 0.25f, rangoVolumenObjetivo = rangoVolumen,
+            contornoTono = listOf(200f, 220f), variacionMinimaTonoHz = variacionMinimaTono,
+            silabasPorMinuto = 200, rangoRitmoObjetivo = rangoRitmo,
+            pausasRespetadas = 0, pausasEsperadas = 4
+        )
+        assertTrue(MotorEvaluacionFuncion.pistaPrincipal(resultado).contains("pausa"))
+    }
+
+    @Test
     fun `sin pausas esperadas no penaliza, y un tono plano no cuenta como entonacion adecuada`() {
         val resultado = MotorEvaluacionFuncion.evaluar(
             volumenPromedio = 0.25f,

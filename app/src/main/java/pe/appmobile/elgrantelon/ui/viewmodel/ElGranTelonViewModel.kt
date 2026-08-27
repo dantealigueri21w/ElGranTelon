@@ -3,6 +3,7 @@ package pe.appmobile.elgrantelon.ui.viewmodel
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -61,8 +62,17 @@ class ElGranTelonViewModel(application: Application) : AndroidViewModel(applicat
     val catalogoAvatares = SemillaAvatares.avatares
 
     private var capturador: CapturadorVoz? = null
-    val lecturaEnVivo: StateFlow<LecturaEnVivo?>
-        get() = capturador?.lecturaEnVivo ?: MutableStateFlow(null).asStateFlow()
+    private var reenvioLecturaEnVivo: Job? = null
+
+    // StateFlow estable durante toda la vida del ViewModel: la UI se
+    // suscribe una sola vez (collectAsState en el NavHost) y nunca necesita
+    // reconectarse a una instancia nueva. Antes, este StateFlow se recreaba
+    // cada vez que no habia capturador activo, y como esa version "fantasma"
+    // ya estaba siendo observada desde antes de tocar Empezar, la UI se
+    // quedaba escuchando al fantasma para siempre en cuanto arrancaba una
+    // declamacion real: Bemo nunca se enteraba de la voz.
+    private val _lecturaEnVivo = MutableStateFlow<LecturaEnVivo?>(null)
+    val lecturaEnVivo: StateFlow<LecturaEnVivo?> = _lecturaEnVivo.asStateFlow()
 
     init {
         viewModelScope.launch {
@@ -101,6 +111,9 @@ class ElGranTelonViewModel(application: Application) : AndroidViewModel(applicat
         if (pudoIniciar) {
             capturador = nuevoCapturador
             _grabando.value = true
+            reenvioLecturaEnVivo = viewModelScope.launch {
+                nuevoCapturador.lecturaEnVivo.collect { _lecturaEnVivo.value = it }
+            }
         }
         return pudoIniciar
     }
@@ -110,6 +123,9 @@ class ElGranTelonViewModel(application: Application) : AndroidViewModel(applicat
         val esRepaso = esRepasoActual
         val capturadorActivo = capturador ?: return
 
+        reenvioLecturaEnVivo?.cancel()
+        reenvioLecturaEnVivo = null
+
         val resultado = capturadorActivo.detener(
             rangoRitmoObjetivo = poema.ritmoMinimoSilabasPorMinuto..poema.ritmoMaximoSilabasPorMinuto,
             variacionMinimaTonoHz = VARIACION_MINIMA_TONO_HZ,
@@ -118,6 +134,7 @@ class ElGranTelonViewModel(application: Application) : AndroidViewModel(applicat
         )
         capturador = null
         _grabando.value = false
+        _lecturaEnVivo.value = null
         _resultadoUltimaFuncion.value = resultado
 
         viewModelScope.launch {

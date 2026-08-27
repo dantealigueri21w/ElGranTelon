@@ -35,4 +35,17 @@ object MotorEvaluacionFuncion {
             aprobado = volumenAdecuado && ritmoAdecuado && pausasOk
         )
     }
+
+    // Prioriza una sola pista accionable, en el mismo orden que exige
+    // aprobado(): volumen, ritmo, pausas. Nunca solo "sigue intentando"
+    // (seccion 5 del prompt maestro: siempre pista y explicacion, nunca
+    // solo correcto/incorrecto).
+    fun pistaPrincipal(resultado: ResultadoIntento): String = when {
+        resultado.aprobado -> "¡Función lograda!"
+        !resultado.volumenAdecuado -> "Prueba hablar un poco más fuerte, así Bemo brilla con más fuerza"
+        !resultado.ritmoAdecuado -> "Prueba cambiar la velocidad: ni muy rápido ni muy lento"
+        resultado.pausasRespetadas < resultado.pausasEsperadas ->
+            "No olvides las pausas marcadas: dan tiempo a que Bemo se pose en silencio"
+        else -> "Sigue ensayando, ya casi está"
+    }
 }

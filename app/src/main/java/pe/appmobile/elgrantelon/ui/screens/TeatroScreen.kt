@@ -39,7 +39,8 @@ fun TeatroScreen(
     onAbrirCamerino: () -> Unit,
     onAbrirCartelera: () -> Unit,
     onAbrirVitrina: () -> Unit,
-    onAbrirAjustes: () -> Unit
+    onAbrirAjustes: () -> Unit,
+    onAbrirFuncionDeRepaso: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -75,7 +76,8 @@ fun TeatroScreen(
 
         Column(
             modifier = Modifier
-                .fillMaxSize()
+                .weight(1f)
+                .fillMaxWidth()
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
@@ -118,31 +120,38 @@ fun TeatroScreen(
                 )
                 Text("Medallas")
             }
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = Modifier
+                    .clickable { onAbrirFuncionDeRepaso() }
+                    .semantics { contentDescription = "Abrir la Función de Repaso" }
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.icono_repaso),
+                    contentDescription = null,
+                    modifier = Modifier.size(32.dp)
+                )
+                Text("Repasar")
+            }
         }
     }
 }
 
 @Composable
 private fun TarjetaActo(acto: ActoEntity, onAbrir: () -> Unit) {
-    val colorFondo = when {
-        acto.completado -> VerdeTelonLateral
-        acto.desbloqueado -> CortinaRoja
-        else -> MaterialTheme.colorScheme.secondary
-    }
-    val estado = when {
-        acto.completado -> "completado"
-        acto.desbloqueado -> "disponible"
-        else -> "bloqueado"
-    }
+    // Todo Acto se toca y se juega desde el primer minuto (seccion 5.1): la
+    // progresion es guia (orden, dificultad), nunca candado de acceso. Los
+    // unicos estados de la tarjeta son completado/disponible.
+    val colorFondo = if (acto.completado) VerdeTelonLateral else CortinaRoja
+    val estado = if (acto.completado) "completado" else "disponible"
 
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .height(120.dp)
             .clip(RoundedCornerShape(16.dp))
-            .then(
-                if (acto.desbloqueado) Modifier.clickable { onAbrir() } else Modifier
-            )
+            .clickable { onAbrir() }
             .semantics { contentDescription = "${acto.nombre}, $estado" },
         contentAlignment = Alignment.CenterStart
     ) {
@@ -155,16 +164,12 @@ private fun TarjetaActo(acto: ActoEntity, onAbrir: () -> Unit) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(colorFondo.copy(alpha = if (acto.desbloqueado) 0.55f else 0.75f))
+                .background(colorFondo.copy(alpha = 0.55f))
         )
         Column(modifier = Modifier.padding(20.dp)) {
             Text(acto.nombre, color = MaterialTheme.colorScheme.onPrimary, style = MaterialTheme.typography.titleLarge)
             Text(
-                text = when {
-                    acto.completado -> "¡Función completa!"
-                    acto.desbloqueado -> "Toca para entrar"
-                    else -> "Bloqueado"
-                },
+                text = if (acto.completado) "¡Función completa!" else "Toca para entrar",
                 color = MaterialTheme.colorScheme.onPrimary
             )
         }

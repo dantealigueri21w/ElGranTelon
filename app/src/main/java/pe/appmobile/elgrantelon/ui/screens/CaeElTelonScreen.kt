@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -19,6 +21,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import pe.appmobile.elgrantelon.data.seed.DefinicionMedalla
+import pe.appmobile.elgrantelon.domain.engine.MotorEvaluacionFuncion
 import pe.appmobile.elgrantelon.domain.model.ResultadoIntento
 import pe.appmobile.elgrantelon.ui.theme.DoradoReflector
 import pe.appmobile.elgrantelon.ui.theme.VerdeTelonLateral
@@ -27,20 +30,19 @@ import pe.appmobile.elgrantelon.ui.theme.VerdeTelonLateral
 fun CaeElTelonScreen(
     resultado: ResultadoIntento,
     medallasNuevas: List<DefinicionMedalla>,
-    onVolverAlTeatro: () -> Unit
+    onVolverAlTeatro: () -> Unit,
+    onReintentar: () -> Unit
 ) {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
+            .verticalScroll(rememberScrollState())
             .padding(24.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Text("Cae el telón", style = MaterialTheme.typography.headlineMedium)
-        Text(
-            if (resultado.aprobado) "¡Función lograda!" else "Sigue ensayando, ya casi está",
-            style = MaterialTheme.typography.titleLarge
-        )
+        Text(MotorEvaluacionFuncion.pistaPrincipal(resultado), style = MaterialTheme.typography.titleLarge)
 
         FilaDato("Volumen", if (resultado.volumenAdecuado) "Firme" else "Sigue practicando")
         FilaDato("Ritmo", if (resultado.ritmoAdecuado) "Sostenido" else "Sigue practicando")
@@ -54,6 +56,17 @@ fun CaeElTelonScreen(
             Text("Medallas nuevas", style = MaterialTheme.typography.titleLarge)
             medallasNuevas.forEach { medalla ->
                 Text("★ ${medalla.nombre}: ${medalla.descripcion}", color = DoradoReflector)
+            }
+        }
+
+        if (!resultado.aprobado) {
+            Button(
+                onClick = onReintentar,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .size(56.dp)
+            ) {
+                Text("Intentar de nuevo")
             }
         }
 

@@ -70,7 +70,8 @@ fun ElGranTelonNavHost(viewModel: ElGranTelonViewModel = viewModel()) {
                 onAbrirCamerino = { navController.navigate(Rutas.CAMERINO) },
                 onAbrirCartelera = { navController.navigate(Rutas.CARTELERA) },
                 onAbrirVitrina = { navController.navigate(Rutas.VITRINA) },
-                onAbrirAjustes = { navController.navigate(Rutas.AJUSTES) }
+                onAbrirAjustes = { navController.navigate(Rutas.AJUSTES) },
+                onAbrirFuncionDeRepaso = { navController.navigate(Rutas.FUNCION_DE_REPASO) }
             )
         }
 
@@ -141,6 +142,9 @@ fun ElGranTelonNavHost(viewModel: ElGranTelonViewModel = viewModel()) {
                         navController.navigate(Rutas.TEATRO) {
                             popUpTo(Rutas.TEATRO) { inclusive = true }
                         }
+                    },
+                    onReintentar = {
+                        poemaActual?.let { poema -> navController.navigate(Rutas.atril(poema.id)) }
                     }
                 )
             }

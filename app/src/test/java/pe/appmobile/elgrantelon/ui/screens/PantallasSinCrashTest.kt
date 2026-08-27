@@ -3,6 +3,8 @@ package pe.appmobile.elgrantelon.ui.screens
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
@@ -64,10 +66,52 @@ class PantallasSinCrashTest {
                 TeatroScreen(
                     actos = actosDePrueba(),
                     onAbrirActo = {}, onAbrirCamerino = {}, onAbrirCartelera = {},
-                    onAbrirVitrina = {}, onAbrirAjustes = {}
+                    onAbrirVitrina = {}, onAbrirAjustes = {}, onAbrirFuncionDeRepaso = {}
                 )
             }
         }
+    }
+
+    @Test
+    fun `TeatroScreen permite llegar a la Funcion de Repaso`() {
+        // FuncionDeRepasoScreen ya existia en el NavHost pero no tenia
+        // ningun punto de entrada real desde El Teatro: era inalcanzable
+        // navegando, aunque los tests que la montan directo pasaran.
+        var seAbrio = false
+        compose.setContent {
+            ElGranTelonTheme {
+                TeatroScreen(
+                    actos = actosDePrueba(),
+                    onAbrirActo = {}, onAbrirCamerino = {}, onAbrirCartelera = {},
+                    onAbrirVitrina = {}, onAbrirAjustes = {}, onAbrirFuncionDeRepaso = { seAbrio = true }
+                )
+            }
+        }
+
+        compose.onNodeWithText("Repasar").performClick()
+
+        assertTrue(seAbrio)
+    }
+
+    @Test
+    fun `TeatroScreen permite entrar a un Acto sin haber completado el anterior`() {
+        // La seccion 5.1 del prompt maestro prohibe cualquier candado de
+        // acceso: todo el contenido se toca y juega desde el primer minuto,
+        // la progresion es guia, nunca bloqueo.
+        var actoAbierto: Int? = null
+        compose.setContent {
+            ElGranTelonTheme {
+                TeatroScreen(
+                    actos = actosDePrueba(),
+                    onAbrirActo = { actoAbierto = it }, onAbrirCamerino = {}, onAbrirCartelera = {},
+                    onAbrirVitrina = {}, onAbrirAjustes = {}, onAbrirFuncionDeRepaso = {}
+                )
+            }
+        }
+
+        compose.onNodeWithText("Subiendo al escenario").performClick()
+
+        assertEquals(2, actoAbierto)
     }
 
     @Test
@@ -142,10 +186,32 @@ class PantallasSinCrashTest {
                 CaeElTelonScreen(
                     resultado = resultadoDePrueba(),
                     medallasNuevas = SemillaMedallas.catalogo.take(1),
-                    onVolverAlTeatro = {}
+                    onVolverAlTeatro = {}, onReintentar = {}
                 )
             }
         }
+    }
+
+    @Test
+    fun `CaeElTelonScreen ofrece intentar de nuevo cuando no se aprueba`() {
+        // Seccion 5 del prompt maestro: nunca solo "Correcto/Incorrecto",
+        // siempre poder reintentar sin humillacion.
+        var seReintento = false
+        compose.setContent {
+            ElGranTelonTheme {
+                CaeElTelonScreen(
+                    resultado = resultadoDePrueba().copy(
+                        aprobado = false, volumenAdecuado = false, ritmoAdecuado = true
+                    ),
+                    medallasNuevas = emptyList(),
+                    onVolverAlTeatro = {}, onReintentar = { seReintento = true }
+                )
+            }
+        }
+
+        compose.onNodeWithText("Intentar de nuevo").performScrollTo().performClick()
+
+        assertTrue(seReintento)
     }
 
     @Test
