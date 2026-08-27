@@ -34,7 +34,7 @@ jobs:
         run: |
           mkdir -p salida
           cp app/build/outputs/apk/debug/app-debug.apk \
-             "salida/${{ vars.APP_NOMBRE }}.v${{ vars.APP_VERSION }}.apk"
+             "salida/${{ vars.APP_NOMBRE || 'ElGranTelon' }}.v${{ vars.APP_VERSION || '1.0.0' }}.apk"
 
       - name: Publicar APK
         uses: actions/upload-artifact@v4
@@ -42,6 +42,7 @@ jobs:
           name: apk
           path: salida/*.apk
           retention-days: 90
+          if-no-files-found: error
 
       - name: Publicar reportes de pruebas
         if: always()
