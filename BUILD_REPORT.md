@@ -113,7 +113,29 @@ no se comitea.
 - `./gradlew lintDebug`: BUILD SUCCESSFUL, 0 errores.
 - `./gradlew assembleDebug`: BUILD SUCCESSFUL, APK de **20 MB** (el arte en
   WebP no movió sensiblemente el tamaño).
-- Pendiente todavía: ícono del lanzador (mipmaps + `AndroidManifest.xml`) y
-  pulir 2 de los 8 recortes de Bemo con residuos de fondo
-  (`bemo_posada`, `bemo_vuelo_alto`) — no bloqueante porque Bemo se sigue
-  dibujando con `Canvas`, no con esas imágenes.
+- Pendiente todavía: pulir 2 de los 8 recortes de Bemo con residuos de
+  fondo (`bemo_posada`, `bemo_vuelo_alto`) — no bloqueante porque Bemo se
+  sigue dibujando con `Canvas`, no con esas imágenes.
+
+## 26/08/2026 — Ícono del lanzador y cierre
+
+- Ícono adaptativo (`mipmap-anydpi-v26/ic_launcher.xml` + `_round.xml`):
+  fondo sólido `#7A2333` (el mismo rojo cortina del ícono fuente, vector
+  en `drawable/ic_launcher_background.xml`) con la ilustración de las
+  cortinas y el destello dorado como capa de primer plano
+  (`drawable-nodpi/icono_lanzador.webp`, recortada a 512×512). El icono
+  fuente ya traía ~18-20% de margen propio en las cuatro esquinas —igual
+  a la zona segura estándar de Android—, así que se usó `inset="0%"` en
+  vez del 18% habitual de las apps hermanas, para no aplicar el margen
+  dos veces y terminar con las cortinas diminutas. `android:icon` quedó
+  enlazado en `AndroidManifest.xml`.
+- Se corrigió que la rama local se llamaba `master` mientras el workflow
+  `.github/workflows/android-build.yml` solo dispara en push a `main`
+  (el mismo desajuste existe en otras apps del lote) — renombrada a
+  `main` para que el primer push genere el APK sin pasos manuales.
+- `./gradlew lintDebug`, `testDebugUnitTest` (82 tests, 0 fallos) y
+  `assembleDebug`: BUILD SUCCESSFUL los tres, desde este mismo estado
+  con el ícono ya enlazado.
+- La app queda completa: dominio y datos, interfaz conectada al arte
+  aprobado, captura de voz real, e ícono de lanzador propio. Sin
+  pendientes bloqueantes.
