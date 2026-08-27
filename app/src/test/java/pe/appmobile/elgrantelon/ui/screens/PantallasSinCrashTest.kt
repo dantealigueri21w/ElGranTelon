@@ -1,6 +1,9 @@
 package pe.appmobile.elgrantelon.ui.screens
 
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
+import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -98,6 +101,26 @@ class PantallasSinCrashTest {
                 )
             }
         }
+    }
+
+    @Test
+    fun `EscenarioScreen permite tocar Empezar sin permiso para poder pedirlo`() {
+        // Sin esto, el usuario que nunca concedio el permiso ve el boton
+        // deshabilitado para siempre: no hay forma de disparar el dialogo
+        // de permiso del sistema desde dentro de la app.
+        var seToco = false
+        compose.setContent {
+            ElGranTelonTheme {
+                EscenarioScreen(
+                    poema = poemaDePrueba(), grabando = false, lecturaEnVivo = null,
+                    sinPermiso = true, onEmpezar = { seToco = true }, onTerminar = {}
+                )
+            }
+        }
+
+        compose.onNodeWithText("Empezar").performClick()
+
+        assertTrue(seToco)
     }
 
     @Test

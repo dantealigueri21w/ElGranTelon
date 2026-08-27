@@ -59,7 +59,6 @@ fun EscenarioScreen(
 
         BotonDeclamar(
             grabando = grabando,
-            habilitado = !sinPermiso,
             onEmpezar = onEmpezar,
             onTerminar = onTerminar
         )
@@ -69,7 +68,6 @@ fun EscenarioScreen(
 @Composable
 private fun BotonDeclamar(
     grabando: Boolean,
-    habilitado: Boolean,
     onEmpezar: () -> Unit,
     onTerminar: () -> Unit
 ) {
@@ -79,7 +77,7 @@ private fun BotonDeclamar(
     Box(
         modifier = Modifier
             .size(140.dp)
-            .clickable(enabled = habilitado) { if (grabando) onTerminar() else onEmpezar() }
+            .clickable { if (grabando) onTerminar() else onEmpezar() }
             .background(color, CircleShape)
             .semantics { contentDescription = "$etiqueta a declamar" },
         contentAlignment = Alignment.Center
