@@ -88,3 +88,32 @@ no se comitea.
 - Pendiente: integrar el arte ilustrado final (se genera por fuera del
   repositorio, siguiendo `02-GUIA-IMAGENES.md`) y el icono del lanzador. La
   app es completamente jugable sin ellos.
+
+## 26/08/2026 — Arte integrado en las 9 pantallas
+
+- Los 28 recursos aprobados (`drawable-nodpi/`) ya no están sueltos: se
+  conectaron a las pantallas reales a través de `ui/RecursosArte.kt`
+  (mapeo `avatarDrawable`, `medallaDrawable`, `actoFondoDrawable`).
+  - Camerino: los 8 avatares numerados en círculo pasaron a ser las
+    ilustraciones reales, recortadas en círculo.
+  - Teatro: cada Acto muestra su fondo ilustrado detrás de una capa de
+    color semitransparente (mantiene el contraste del texto); los accesos
+    a Camerino/Ajustes/Cartelera/Vitrina usan los íconos de módulo en
+    lugar de los íconos genéricos de Material.
+  - Vitrina de medallas: las 9 medallas ilustradas reemplazan las cajas de
+    color; una medalla no ganada se atenúa (alpha 0.3) en vez de mostrar
+    la palabra "Bloqueada" sola.
+  - Cartelera: `plantilla_cartel` como fondo de cada tarjeta de logro.
+  - Programa de mano, Función de repaso y Ajustes: ícono de módulo junto
+    al título de cada pantalla.
+- `./gradlew compileDebugKotlin`: BUILD SUCCESSFUL.
+- `./gradlew testDebugUnitTest`: BUILD SUCCESSFUL, **82 tests, 0 fallos**
+  (las 13 pruebas de `PantallasSinCrashTest.kt` siguen renderizando las 9
+  pantallas sin excepción, ahora con imágenes reales en vez de placeholders).
+- `./gradlew lintDebug`: BUILD SUCCESSFUL, 0 errores.
+- `./gradlew assembleDebug`: BUILD SUCCESSFUL, APK de **20 MB** (el arte en
+  WebP no movió sensiblemente el tamaño).
+- Pendiente todavía: ícono del lanzador (mipmaps + `AndroidManifest.xml`) y
+  pulir 2 de los 8 recortes de Bemo con residuos de fondo
+  (`bemo_posada`, `bemo_vuelo_alto`) — no bloqueante porque Bemo se sigue
+  dibujando con `Canvas`, no con esas imágenes.

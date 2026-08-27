@@ -1,5 +1,6 @@
 package pe.appmobile.elgrantelon.ui.screens
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -7,6 +8,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -17,7 +19,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import pe.appmobile.elgrantelon.R
 
 @Composable
 fun AjustesScreen(alias: String?) {
@@ -30,7 +34,14 @@ fun AjustesScreen(alias: String?) {
             .padding(24.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        Text("Ajustes", style = MaterialTheme.typography.headlineMedium)
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            Image(
+                painter = painterResource(id = R.drawable.icono_ajustes),
+                contentDescription = null,
+                modifier = Modifier.size(32.dp)
+            )
+            Text("Ajustes", style = MaterialTheme.typography.headlineMedium)
+        }
         Text("Actor en escena: ${alias ?: "sin definir"}")
 
         Row(
