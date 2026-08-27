@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -72,7 +71,6 @@ private fun TarjetaMedalla(medalla: DefinicionMedalla, ganada: Boolean, modifier
 
     Box(
         modifier = modifier
-            .height(110.dp)
             .background(colorFondo, RoundedCornerShape(12.dp))
             .semantics { contentDescription = descripcionAccesible },
         contentAlignment = Alignment.Center
